@@ -4,19 +4,16 @@ import React, { Suspense, useRef } from 'react';
 import Room from '../components/room2';
 
 // Externals
-import { Canvas } from '@react-three/fiber';
-import { BakeShadows, CameraControls, Html, Preload, Stage, useHelper, useProgress } from '@react-three/drei';
-
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { BakeShadows, CameraControls, Html, Stage, Stats, useProgress } from '@react-three/drei';
 import CameraControlsImpl from 'camera-controls';
 import type { HeadFC, PageProps } from 'gatsby';
 
 // Layouts
 import Layout from '../layouts';
-import { DirectionalLight, DirectionalLightHelper } from 'three';
+import { DirectionalLight } from 'three';
 
 const IndexPage: React.FC<PageProps> = () => {
-  const dirLight = useRef<DirectionalLight>(null);
-
   return (
     <Layout>
       <Canvas
@@ -26,23 +23,21 @@ const IndexPage: React.FC<PageProps> = () => {
         shadows={true}
       >
         <Suspense fallback={<Loader />}>
-          {/* <ambientLight intensity={1} /> */}
-          <directionalLight
-            castShadow={true}
-            color={0xffffff}
-            intensity={7}
-            position={[-5, 5, -10]}
-            ref={dirLight}
-            rotation={[-2, -1, 0]}
-          />
-          {/* {dirLight.current && <directionalLightHelper args={[dirLight.current, 4, 0xff0000]} />}  */}
-          <Stage adjustCamera={false} environment="forest" intensity={0.2} shadows="contact">
+          <Stage
+            adjustCamera={false}
+            environment={{
+              background: false,
+              backgroundBlurriness: 0,
+              backgroundIntensity: 0.3,
+              backgroundRotation: [0, Math.PI / 2, 0],
+              environmentIntensity: 0.3,
+              environmentRotation: [0, Math.PI / 2, 0],
+              preset: 'apartment'
+            }}
+            shadows="contact"
+          >
             <Room />
           </Stage>
-
-          <Preload all={true} />
-
-          {/* <BakeShadows /> */}
 
           <CameraControls
             enabled={true}
@@ -64,11 +59,27 @@ const IndexPage: React.FC<PageProps> = () => {
               three: CameraControlsImpl.ACTION.NONE
             }}
           />
+
+          <CameraDirectionalLight />
         </Suspense>
       </Canvas>
     </Layout>
   );
 };
+
+function CameraDirectionalLight() {
+  const { camera } = useThree();
+
+  const lightRef = useRef<DirectionalLight>(null);
+
+  useFrame(() => {
+    if (lightRef.current) {
+      lightRef.current.position.set(-camera.rotation.z * (40 / Math.PI), 5, -10);
+    }
+  });
+
+  return <directionalLight castShadow={true} color={0xffffff} intensity={5} ref={lightRef} rotation={[-2, -1, 0]} />;
+}
 
 function Loader() {
   const { progress } = useProgress();
