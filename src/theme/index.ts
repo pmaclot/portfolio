@@ -45,7 +45,9 @@ const theme = {
     }
   },
   config: {
-    useColorSchemeMediaQuery: true,
+    initialColorModeName: 'light',
+    printColorModeName: 'light',
+    useColorSchemeMediaQuery: false,
     useCustomProperties: true,
     useLocalStorage: false
   }

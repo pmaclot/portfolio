@@ -1,17 +1,17 @@
 import React, { Suspense, useRef } from 'react';
 
 // Components
-import Room from '../components/room2';
+import Room from '../components/room';
 
 // Externals
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { BakeShadows, CameraControls, Html, Stage, Stats, useProgress } from '@react-three/drei';
+import { CameraControls, Html, Stage, useProgress } from '@react-three/drei';
 import CameraControlsImpl from 'camera-controls';
 import type { HeadFC, PageProps } from 'gatsby';
+import { DirectionalLight } from 'three';
 
 // Layouts
 import Layout from '../layouts';
-import { DirectionalLight } from 'three';
 
 const IndexPage: React.FC<PageProps> = () => {
   return (
@@ -67,6 +67,7 @@ const IndexPage: React.FC<PageProps> = () => {
   );
 };
 
+// TODO: Move to a separate file
 function CameraDirectionalLight() {
   const { camera } = useThree();
 
@@ -81,6 +82,7 @@ function CameraDirectionalLight() {
   return <directionalLight castShadow={true} color={0xffffff} intensity={5} ref={lightRef} rotation={[-2, -1, 0]} />;
 }
 
+// TODO: Move to a separate file
 function Loader() {
   const { progress } = useProgress();
 
