@@ -1,6 +1,7 @@
 import React, { useCallback, useLayoutEffect, useState } from 'react';
 
 // Externals
+import { useLocation } from '@reach/router';
 import { animated, useTransition } from '@react-spring/web';
 import PropTypes from 'prop-types';
 import { Box, useThemeUI } from 'theme-ui';
@@ -16,29 +17,33 @@ interface AppProps {
 }
 
 const App: React.FC<AppProps> = ({ children }) => {
+  const { pathname } = useLocation();
   const { theme } = useThemeUI();
 
-  // TODO: Only when path is "/" and history is empty (new visit)
-  const [loading, setLoading] = useState<boolean>(false);
+  const [splashscreen, setSplashscreen] = useState<boolean>(pathname === '/');
 
-  const transitionSplashscreen = useTransition(loading, {
+  const transitionSplashscreen = useTransition(splashscreen, {
     from: { opacity: '1' },
     enter: { delay: 0, opacity: '1' },
     leave: { delay: 500, opacity: '0' },
-    onRest: () => {
-      // Show body scrollbar
-      document.body.style.overflow = 'auto';
+    onDestroyed: (isDestroyed: boolean) => {
+      if (isDestroyed) {
+        // Show body scrollbar
+        document.body.style.overflow = 'auto';
+      }
     }
   });
 
   const onReady = useCallback((): void => {
-    setLoading(false);
+    setSplashscreen(false);
   }, []);
 
   useLayoutEffect(() => {
-    // Hide body scrollbar
-    document.body.style.overflow = 'hidden';
-  }, []);
+    if (splashscreen) {
+      // Hide body scrollbar
+      document.body.style.overflow = 'hidden';
+    }
+  }, [splashscreen]);
 
   return (
     <React.Fragment>
@@ -63,7 +68,7 @@ const App: React.FC<AppProps> = ({ children }) => {
             </animated.div>
           )
       )}
-      <Box sx={{ display: loading ? 'none' : 'block' }}>{children}</Box>
+      <Box sx={{ display: splashscreen ? 'none' : 'block' }}>{children}</Box>
     </React.Fragment>
   );
 };

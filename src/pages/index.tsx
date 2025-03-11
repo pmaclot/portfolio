@@ -16,7 +16,7 @@ import Layout from '../layouts';
 const IndexPage: React.FC<PageProps> = () => {
   return (
     <Layout>
-      <Canvas
+      {/* <Canvas
         camera={{ fov: 75, near: 0.1, far: 1000, position: [0, 0, 10] }}
         frameloop="demand"
         orthographic={true}
@@ -62,7 +62,7 @@ const IndexPage: React.FC<PageProps> = () => {
 
           <CameraDirectionalLight />
         </Suspense>
-      </Canvas>
+      </Canvas> */}
     </Layout>
   );
 };

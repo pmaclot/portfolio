@@ -16,10 +16,12 @@ interface SplashScreenProps {
 }
 
 const SplashScreen = forwardRef<HTMLDivElement, SplashScreenProps>(({ onReady }, ref) => {
-  const quote = useMemo<Quote>(
-    () => quotes[Math.floor(seedrandom(new Date().toDateString()).quick() * quotes.length)],
-    []
-  );
+  const quote = useMemo<Quote>(() => {
+    const date = new Date();
+    const seed = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+
+    return quotes[Math.floor(seedrandom(seed).quick() * quotes.length)];
+  }, []);
 
   const [text, { isDone }] = useTypewriter({
     loop: 1,

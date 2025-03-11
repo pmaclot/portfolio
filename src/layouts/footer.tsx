@@ -1,10 +1,7 @@
-import React, { useContext } from 'react';
-
-// Contexts
-import RoomContext from '../context/room';
+import React from 'react';
 
 // Externals
-import { Flex, Link } from 'theme-ui';
+import { Flex, Text } from 'theme-ui';
 import type { ThemeUIStyleObject } from 'theme-ui';
 
 interface FooterProps {
@@ -12,19 +9,12 @@ interface FooterProps {
 }
 
 const Footer: React.FC<FooterProps> = ({ sx }) => {
-  const { toggleProjectorZoomed, toggleScreenZoomed } = useContext(RoomContext);
-
   return (
     <Flex
       px={4}
-      sx={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', minHeight: '72px', ...sx }}
+      sx={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'center', minHeight: '72px', ...sx }}
     >
-      <Link onClick={toggleProjectorZoomed} sx={{ color: 'primary', cursor: 'pointer' }}>
-        Portfolio.
-      </Link>
-      <Link onClick={toggleScreenZoomed} sx={{ color: 'primary', cursor: 'pointer' }}>
-        Experience.
-      </Link>
+      <Text>© {new Date().getFullYear()}. All rights reserved.</Text>
     </Flex>
   );
 };

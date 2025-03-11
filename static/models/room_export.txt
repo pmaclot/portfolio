@@ -1,4 +1,4 @@
-Include: 
+Include:
 - Visible Objects
 - Punctual Lights
 
@@ -7,7 +7,7 @@ Transform:
 
 Data:
 - Mesh: All except for tangeants & attributes
-- Material: Export, Automatic, 75
+- Material: Export, Automatic, 100
 - PBR: Export Original PBR Materials
 - Compression: No
 

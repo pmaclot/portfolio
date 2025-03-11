@@ -19,8 +19,8 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { spotifyPlayer } = useContext(RoomContext);
 
-  const [height, setHeight] = useState('100%');
-  const [width, setWidth] = useState('100%');
+  const [height, setHeight] = useState<string>('100%');
+  const [width, setWidth] = useState<string>('100%');
 
   const canvasRef = useRef<HTMLDivElement>(null!);
 
