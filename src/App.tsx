@@ -1,4 +1,7 @@
-import React, { useCallback, useLayoutEffect, useState } from 'react';
+import React, { useCallback, useContext, useLayoutEffect, useRef, useState } from 'react';
+
+// Contexts
+import UIContext from './context/ui';
 
 // Externals
 import { useLocation } from '@reach/router';
@@ -17,10 +20,15 @@ interface AppProps {
 }
 
 const App: React.FC<AppProps> = ({ children }) => {
+  const { loadScene } = useContext(UIContext);
+
   const { pathname } = useLocation();
   const { theme } = useThemeUI();
 
-  const [splashscreen, setSplashscreen] = useState<boolean>(pathname === '/');
+  // const [splashscreen, setSplashscreen] = useState<boolean>(pathname === '/');
+  const [splashscreen, setSplashscreen] = useState<boolean>(false);
+
+  const containerRef = useRef<HTMLDivElement>(null!);
 
   const transitionSplashscreen = useTransition(splashscreen, {
     from: { opacity: '1' },
@@ -30,6 +38,9 @@ const App: React.FC<AppProps> = ({ children }) => {
       if (isDestroyed) {
         // Show body scrollbar
         document.body.style.overflow = 'auto';
+
+        // Start loading the scene
+        loadScene();
       }
     }
   });
@@ -42,8 +53,15 @@ const App: React.FC<AppProps> = ({ children }) => {
     if (splashscreen) {
       // Hide body scrollbar
       document.body.style.overflow = 'hidden';
+    } else {
+      // Show body scrollbar
+      document.body.style.overflow = 'auto';
+
+      // Start loading the scene
+      loadScene();
     }
-  }, [splashscreen]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <React.Fragment>
@@ -68,13 +86,13 @@ const App: React.FC<AppProps> = ({ children }) => {
             </animated.div>
           )
       )}
-      <Box sx={{ display: splashscreen ? 'none' : 'block' }}>{children}</Box>
+      <Box ref={containerRef}>{children}</Box>
     </React.Fragment>
   );
 };
 
 App.propTypes = {
-  children: PropTypes.element
+  children: PropTypes.element.isRequired
 };
 
 export default App;

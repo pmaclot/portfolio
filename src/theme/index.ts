@@ -25,13 +25,17 @@ const theme = {
       color: 'background',
       bg: 'primary'
     },
-    highlight: {
-      color: 'text',
-      bg: 'highlight'
+    secondary: {
+      color: 'background',
+      bg: 'secondary'
     },
     accent: {
       color: 'background',
       bg: 'accent'
+    },
+    highlight: {
+      color: 'text',
+      bg: 'highlight'
     },
     outline: {
       color: 'primary',
@@ -50,6 +54,14 @@ const theme = {
     useColorSchemeMediaQuery: false,
     useCustomProperties: true,
     useLocalStorage: false
+  },
+  fonts: {
+    body: 'Open Sans, sans-serif',
+    heading: 'Ubuntu, sans-serif'
+  },
+  fontWeights: {
+    body: 400,
+    heading: 700
   }
 };
 

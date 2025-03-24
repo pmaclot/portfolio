@@ -7,6 +7,7 @@ import { Flex, Heading, Paragraph } from 'theme-ui';
 const NotFoundPage: React.FC<PageProps> = () => {
   return (
     <Flex
+      as="div"
       sx={{ alignItems: 'center', flexDirection: 'column', justifyContent: 'center', height: '100vh', width: '100vw' }}
     >
       <Heading as="h2" sx={{ color: 'primary', width: 'fit-content' }}>

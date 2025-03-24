@@ -6,18 +6,18 @@ import Footer from './footer';
 import Header from './header';
 
 // Context
-import RoomContext from '../context/room';
+import UIContext from '../context/ui';
 
 // Externals
 import PropTypes from 'prop-types';
 import { Box } from 'theme-ui';
 
 interface LayoutProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const { spotifyPlayer } = useContext(RoomContext);
+  const { spotifyPlayerShowed } = useContext(UIContext);
 
   const [height, setHeight] = useState<string>('100%');
   const [width, setWidth] = useState<string>('100%');
@@ -32,8 +32,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         const canvasHeight = canvasElement.clientHeight;
         const canvasWidth = canvasElement.clientWidth;
 
-        setWidth(`${canvasWidth % 2 !== 0 ? canvasWidth + 1 : canvasWidth}px`);
-        setHeight(`${canvasHeight % 2 !== 0 ? canvasHeight + 1 : canvasHeight}px`);
+        setWidth(`${canvasWidth % 2 !== 0 ? canvasWidth - 1 : canvasWidth}px`);
+        setHeight(`${canvasHeight % 2 !== 0 ? canvasHeight - 1 : canvasHeight}px`);
       }
     };
 
@@ -56,7 +56,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <Box ref={canvasRef} sx={{ height: height, width: width, zIndex: 0 }}>
         {children}
       </Box>
-      {spotifyPlayer && (
+      {spotifyPlayerShowed && (
         <Box
           sx={{
             position: 'fixed',

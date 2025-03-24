@@ -14,7 +14,7 @@ const Footer: React.FC<FooterProps> = ({ sx }) => {
       px={4}
       sx={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'center', minHeight: '72px', ...sx }}
     >
-      <Text>© {new Date().getFullYear()}. All rights reserved.</Text>
+      <Text color="secondary">© {new Date().getFullYear()}. All rights reserved.</Text>
     </Flex>
   );
 };

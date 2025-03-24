@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
-    "@mdx-js/react": "^3.1.0",
+    "@mdx-js/react": "^2",
     "@react-spring/web": "^9.7.5",
     "@react-three/drei": "^9.121.5",
     "@react-three/fiber": "^8.17.14",
@@ -28,6 +28,7 @@
     "@theme-ui/preset-tosh": "^0.17.2",
     "@theme-ui/style-guide": "^0.17.2",
     "gatsby": "^5.14.1",
+    "gatsby-omni-font-loader": "^2.0.2",
     "gatsby-plugin-image": "^3.14.0",
     "gatsby-plugin-manifest": "^5.14.0",
     "gatsby-plugin-sass": "^6.14.0",
@@ -40,6 +41,7 @@
     "randomcolor": "^0.6.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-helmet": "^6.1.0",
     "react-pacman": "^0.0.4",
     "react-simple-typewriter": "^5.0.1",
     "sass": "^1.85.0",
@@ -48,6 +50,9 @@
     "three": "^0.173.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/plugin-syntax-flow": "^7.14.5",
+    "@babel/plugin-transform-react-jsx": "^7.14.9",
     "@types/mdx": "^2.0.13",
     "@types/node": "^22.13.4",
     "@types/randomcolor": "^0.5.9",
@@ -57,11 +62,13 @@
     "@types/three": "^0.173.0",
     "@typescript-eslint/eslint-plugin": "^5.59.11",
     "@typescript-eslint/parser": "^5.59.11",
+    "babel-eslint": "^10.0.0",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.8.8",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "webpack": "^5.98.0"
   }
 }

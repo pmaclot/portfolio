@@ -4,13 +4,13 @@ import React from 'react';
 import App from './src/App';
 
 // Contexts
-import { RoomProvider } from './src/context/room';
+import { UIProvider } from './src/context/ui';
 
 // Externals
 import { PageProps } from 'gatsby';
 
 export const wrapPageElement = ({ element, props }: { element: React.ReactNode; props: PageProps }) => (
-  <RoomProvider>
+  <UIProvider>
     <App {...props}>{element}</App>
-  </RoomProvider>
+  </UIProvider>
 );

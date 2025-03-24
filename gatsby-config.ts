@@ -23,6 +23,27 @@ const config: GatsbyConfig = {
         preset: require('./src/theme')
       }
     },
+    {
+      resolve: `gatsby-omni-font-loader`,
+      options: {
+        enableListener: true,
+        preconnect: [`https://fonts.googleapis.com`, `https://fonts.gstatic.com`],
+        web: [
+          {
+            name: `Honk`,
+            file: `https://fonts.googleapis.com/css2?family=Honk&display=swap`
+          },
+          {
+            name: `Ubuntu`,
+            file: `https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,700;1,700&display=swap`
+          },
+          {
+            name: `Open Sans`,
+            file: `https://fonts.googleapis.com/css2?family=Open+Sans:ital,wdth,wght@0,75..100,300..800;1,75..100,300..800&display=swap`
+          }
+        ]
+      }
+    },
     'gatsby-plugin-sass',
     'gatsby-plugin-sharp',
     'gatsby-transformer-sharp'
