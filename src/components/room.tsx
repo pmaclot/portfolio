@@ -132,8 +132,8 @@ const Room: React.FC<GroupProps> = (props) => {
 
     // Resetting the camera
     await Promise.all([
-      (controls as unknown as CameraControls).rotateAzimuthTo(Math.PI / 4, true),
-      (controls as unknown as CameraControls).rotatePolarTo(Math.PI / 3, true),
+      (controls as unknown as CameraControls).rotateAzimuthTo(Math.PI / 4, false),
+      (controls as unknown as CameraControls).rotatePolarTo(Math.PI / 2.5, false),
       (controls as unknown as CameraControls).fitToSphere(modelGroupRef.current, true)
     ]);
   }, [controls]);
@@ -836,7 +836,5 @@ const Room: React.FC<GroupProps> = (props) => {
     </group>
   );
 };
-
-useGLTF.preload('/models/room.glb');
 
 export default Room;

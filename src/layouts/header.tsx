@@ -47,7 +47,7 @@ const Header: React.FC<HeaderProps> = ({ sx }) => {
       >
         Pierre Maclot
       </Link>
-      <Text color="secondary">{date}</Text>
+      <Text color="primary">{date}</Text>
     </Flex>
   );
 };

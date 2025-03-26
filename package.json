@@ -21,7 +21,7 @@
     "@emotion/react": "^11.14.0",
     "@mdx-js/react": "^2",
     "@react-spring/web": "^9.7.5",
-    "@react-three/drei": "^9.121.5",
+    "@react-three/drei": "^9.122.0",
     "@react-three/fiber": "^8.17.14",
     "@theme-ui/css": "^0.17.2",
     "@theme-ui/mdx": "^0.17.2",

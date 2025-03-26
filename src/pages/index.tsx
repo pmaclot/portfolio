@@ -8,7 +8,7 @@ import UIContext from '../context/ui';
 
 // Externals
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { CameraControls, Html, Stage, useProgress } from '@react-three/drei';
+import { CameraControls, Preload, Stage, useProgress } from '@react-three/drei';
 import CameraControlsImpl from 'camera-controls';
 import type { HeadFC, PageProps } from 'gatsby';
 import { Box, Flex, Progress } from 'theme-ui';
@@ -22,13 +22,13 @@ const IndexPage: React.FC<PageProps> = () => {
 
   return (
     <Layout>
-      <Loader />
-      {sceneLoaded ? (
+      {sceneLoaded && (
         <Canvas
           camera={{ fov: 75, near: 0.1, far: 1000, position: [0, 0, 10] }}
           frameloop="demand"
           orthographic={true}
           shadows={true}
+          style={{ position: 'absolute', zIndex: 100 }}
         >
           <Suspense fallback={null}>
             <Stage
@@ -46,6 +46,8 @@ const IndexPage: React.FC<PageProps> = () => {
             >
               <Room />
             </Stage>
+
+            <Preload all={true} />
 
             <CameraControls
               enabled={true}
@@ -71,7 +73,8 @@ const IndexPage: React.FC<PageProps> = () => {
             <CameraDirectionalLight />
           </Suspense>
         </Canvas>
-      ) : null}
+      )}
+      <Loader />
     </Layout>
   );
 };
@@ -92,11 +95,28 @@ function CameraDirectionalLight() {
 }
 
 // TODO: Move to a separate file
-// TODO: Make it appear with fading effect
 function Loader() {
-  const { progress } = useProgress();
+  const { active, progress } = useProgress();
 
-  return <Progress max={100} value={progress.toFixed(0)} />;
+  if (!active && progress === 100) return null;
+
+  return (
+    <Flex
+      sx={{
+        alignItems: 'center',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        position: 'absolute',
+        height: '100%',
+        width: '100%',
+        zIndex: 0
+      }}
+    >
+      <Box as="div" sx={{ width: '200px' }}>
+        <Progress max={100} value={progress.toFixed(0)} />
+      </Box>
+    </Flex>
+  );
 }
 
 export default IndexPage;

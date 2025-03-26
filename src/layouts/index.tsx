@@ -9,7 +9,6 @@ import Header from './header';
 import UIContext from '../context/ui';
 
 // Externals
-import PropTypes from 'prop-types';
 import { Box } from 'theme-ui';
 
 interface LayoutProps {
@@ -52,8 +51,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         width: '100svw'
       }}
     >
-      <Header sx={{ position: 'fixed', top: 0, width: '100%', zIndex: 200 }} />
-      <Box ref={canvasRef} sx={{ height: height, width: width, zIndex: 0 }}>
+      <Header sx={{ position: 'fixed', top: 0, width: '100%', zIndex: 100 }} />
+      <Box ref={canvasRef} sx={{ position: 'relative', height: height, width: width, zIndex: 0 }}>
         {children}
       </Box>
       {spotifyPlayerShowed && (
@@ -70,13 +69,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <Spotify />
         </Box>
       )}
-      <Footer sx={{ position: 'fixed', bottom: 0, width: '100%', zIndex: 200 }} />
+      <Footer sx={{ position: 'fixed', bottom: 0, width: '100%', zIndex: 100 }} />
     </Box>
   );
-};
-
-Layout.propTypes = {
-  children: PropTypes.element
 };
 
 export default Layout;

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useLayoutEffect, useState } from 'react';
 
 // Contexts
 import UIContext from './context/ui';
@@ -6,8 +6,7 @@ import UIContext from './context/ui';
 // Externals
 import { useLocation } from '@reach/router';
 import { animated, useTransition } from '@react-spring/web';
-import PropTypes from 'prop-types';
-import { Box, useThemeUI } from 'theme-ui';
+import { useThemeUI } from 'theme-ui';
 
 // Screens
 import SplashScreen from './screens/splashscreen';
@@ -25,10 +24,7 @@ const App: React.FC<AppProps> = ({ children }) => {
   const { pathname } = useLocation();
   const { theme } = useThemeUI();
 
-  // const [splashscreen, setSplashscreen] = useState<boolean>(pathname === '/');
-  const [splashscreen, setSplashscreen] = useState<boolean>(false);
-
-  const containerRef = useRef<HTMLDivElement>(null!);
+  const [splashscreen, setSplashscreen] = useState<boolean>(pathname === '/');
 
   const transitionSplashscreen = useTransition(splashscreen, {
     from: { opacity: '1' },
@@ -86,13 +82,9 @@ const App: React.FC<AppProps> = ({ children }) => {
             </animated.div>
           )
       )}
-      <Box ref={containerRef}>{children}</Box>
+      {children}
     </React.Fragment>
   );
-};
-
-App.propTypes = {
-  children: PropTypes.element.isRequired
 };
 
 export default App;

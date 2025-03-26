@@ -43,20 +43,18 @@ const SplashScreen = forwardRef<HTMLDivElement, SplashScreenProps>(({ onReady },
         alignItems: 'flex-start',
         flexDirection: 'column',
         justifyContent: 'center',
-        px: 5,
-        height: '100%',
-        width: '100%'
+        p: 4,
+        height: '100svh',
+        width: '100svw'
       }}
     >
-      <Box as="div">
-        <Heading as="h2" sx={{ color: 'primary', width: 'fit-content' }}>
-          <Box as="span">{text}</Box>
-          <Cursor />
-        </Heading>
-        <animated.div style={styles}>
-          <Paragraph sx={{ color: 'secondary', width: 'fit-content' }}>{quote.author}</Paragraph>
-        </animated.div>
-      </Box>
+      <Heading as="h2" sx={{ color: 'primary', width: 'fit-content' }}>
+        <Box as="span">{text}</Box>
+        <Cursor />
+      </Heading>
+      <animated.div style={styles}>
+        <Paragraph sx={{ color: 'secondary', width: 'fit-content' }}>{quote.author}</Paragraph>
+      </animated.div>
     </Flex>
   );
 });
