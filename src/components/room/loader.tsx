@@ -1,6 +1,7 @@
+import React from 'react';
+
 // Externals
 import { useProgress } from '@react-three/drei';
-import React from 'react';
 import { Box, Flex, Progress, Text } from 'theme-ui';
 
 const Loader: React.FC = () => {

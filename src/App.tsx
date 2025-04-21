@@ -33,8 +33,6 @@ const App: React.FC<AppProps> = ({ children }) => {
     leave: { delay: 500, opacity: '0' },
     onDestroyed: (isDestroyed: boolean) => {
       if (isDestroyed) {
-        document.body.style.overflow = 'auto';
-
         loadScene();
       }
     }
@@ -49,12 +47,8 @@ const App: React.FC<AppProps> = ({ children }) => {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';
-
-      // TODO: Remove
-      loadScene();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [splashscreen]);
 
   return (
     <React.Fragment>

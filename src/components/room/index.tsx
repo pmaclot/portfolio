@@ -1,14 +1,16 @@
-import React, { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { memo, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+
+// Context
+import UIContext from '../../context/ui';
 
 // Externals
-import { CameraControls, Outlines, useGLTF } from '@react-three/drei';
+import { CameraControls, Outlines, useCursor, useGLTF } from '@react-three/drei';
 import { GroupProps, useFrame, useThree } from '@react-three/fiber';
-import { Alert, Button, Flex, Paragraph, Text } from 'theme-ui';
+import { Alert, Button, Flex, Paragraph } from 'theme-ui';
 import { Group, Mesh, MeshStandardMaterial } from 'three';
 import { GLTF } from 'three-stdlib';
 import randomColor from 'randomcolor';
 import toast from 'react-hot-toast';
-import { set } from 'lodash';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -121,13 +123,21 @@ const Room: React.FC<GroupProps> = (props) => {
   const { nodes, materials } = useGLTF('/models/room.glb') as GLTFResult;
   const { controls } = useThree();
 
+  const { monitorViewToggled, toggleMonitorView, toggleSpotifyPlayer } = useContext(UIContext);
+
+  const [monitorHovered, setMonitorHovered] = useState<boolean>(false);
+  const [stereoHovered, setStereoHovered] = useState<boolean>(false);
+
+  const [firstRender, setFirstRender] = useState<boolean>(true);
+  const [outlineOpacity, setOutlineOpacity] = useState<number>(1);
+  const [tutorialStep, setTutorialStep] = useState<'WELCOME' | 'OBJECTS' | 'EASTER_EGG'>('WELCOME');
+
+  useCursor(stereoHovered || (monitorHovered && !monitorViewToggled), 'pointer', 'auto');
+
   // This is used for camera transitions
   const modelGroupRef = useRef<Group>(null!);
   const monitorGroupRef = useRef<Group>(null!);
   const stereoGroupRef = useRef<Group>(null!);
-
-  const [outlineOpacity, setOutlineOpacity] = useState<number>(1);
-  const [tutorialStep, setTutorialStep] = useState<'WELCOME' | 'OBJECTS' | 'EASTER_EGG'>('WELCOME');
 
   const cameraToModel = useCallback(async (): Promise<void> => {
     if (!controls) return;
@@ -138,13 +148,43 @@ const Room: React.FC<GroupProps> = (props) => {
     (controls as unknown as CameraControls).minPolarAngle = 0;
     (controls as unknown as CameraControls).maxPolarAngle = Math.PI / 2;
 
-    // Resetting the camera
     await Promise.all([
-      (controls as unknown as CameraControls).rotateAzimuthTo(Math.PI / 4, false),
-      (controls as unknown as CameraControls).rotatePolarTo(Math.PI / 2.6, false),
-      (controls as unknown as CameraControls).fitToSphere(modelGroupRef.current, true)
+      (controls as unknown as CameraControls).rotateTo(Math.PI / 4, Math.PI / 2.5, !firstRender),
+      (controls as unknown as CameraControls).fitToSphere(modelGroupRef.current, true),
+      (controls as unknown as CameraControls).moveTo(-0.1, 0, 0, true)
+    ]);
+
+    if (firstRender) setFirstRender(false);
+  }, [controls, firstRender]);
+
+  const cameraToMonitor = useCallback(async (): Promise<void> => {
+    if (!controls) return;
+
+    // Modifying the controls, since it's not possible to 'lock' temporarily the camera
+    (controls as unknown as CameraControls).minAzimuthAngle = 0.00001;
+    (controls as unknown as CameraControls).maxAzimuthAngle = 0.00001;
+    (controls as unknown as CameraControls).minPolarAngle = Math.PI / 2.21;
+    (controls as unknown as CameraControls).maxPolarAngle = Math.PI / 2.21;
+
+    // Set the camera on the screen
+    await Promise.all([
+      (controls as unknown as CameraControls).rotateTo(0.00001, Math.PI / 2.21, true),
+      (controls as unknown as CameraControls).fitToBox(monitorGroupRef.current, true, {
+        cover: false,
+        paddingLeft: 0.1,
+        paddingRight: 0.1,
+        paddingTop: 0.1
+      })
     ]);
   }, [controls]);
+
+  const handleMonitorClick = useCallback((): void => {
+    if (controls && !(controls as unknown as CameraControls).active) toggleMonitorView();
+  }, [controls, toggleMonitorView]);
+
+  const handleStereoClick = useCallback((): void => {
+    if (controls && !(controls as unknown as CameraControls).active) toggleSpotifyPlayer();
+  }, [controls, toggleSpotifyPlayer]);
 
   const books = useMemo<React.ReactNode>(() => {
     console.log('rendering books');
@@ -237,40 +277,48 @@ const Room: React.FC<GroupProps> = (props) => {
     console.log('rendering monitor');
 
     return (
-      <mesh
-        castShadow={true}
-        geometry={nodes.Monitor.geometry}
-        material={materials.Steel}
-        onClick={() => console.log('Monitor clicked!')}
-        position={[0.012, 1.719, -3.171]}
-        receiveShadow={true}
-        scale={1.129}
+      <group
+        onClick={!monitorViewToggled ? handleMonitorClick : undefined}
+        onPointerOut={() => setMonitorHovered(false)}
+        onPointerOver={() => setMonitorHovered(true)}
+        ref={monitorGroupRef}
       >
-        <mesh castShadow={true} geometry={nodes.Display.geometry} material={materials.Coffee} receiveShadow={true} />
         <mesh
           castShadow={true}
-          geometry={nodes.Monitor_Screen.geometry}
+          geometry={nodes.Monitor.geometry}
           material={materials.Steel}
+          position={[0.012, 1.719, -3.171]}
           receiveShadow={true}
-        />
-        <mesh
-          castShadow={true}
-          geometry={nodes.Monitor_Stand.geometry}
-          material={materials.Steel}
-          receiveShadow={true}
-        />
-        {tutorialStep === 'OBJECTS' && (
-          <Outlines color="yellow" opacity={outlineOpacity} screenspace={true} transparent={true} />
-        )}
-      </mesh>
+          scale={1.129}
+        >
+          <mesh castShadow={true} geometry={nodes.Display.geometry} material={materials.Coffee} receiveShadow={true} />
+          <mesh
+            castShadow={true}
+            geometry={nodes.Monitor_Screen.geometry}
+            material={materials.Steel}
+            receiveShadow={true}
+          />
+          <mesh
+            castShadow={true}
+            geometry={nodes.Monitor_Stand.geometry}
+            material={materials.Steel}
+            receiveShadow={true}
+          />
+          {tutorialStep === 'OBJECTS' && (
+            <Outlines color="yellow" opacity={outlineOpacity} screenspace={true} transparent={true} />
+          )}
+        </mesh>
+      </group>
     );
   }, [
     materials,
+    monitorViewToggled,
     nodes.Display.geometry,
     nodes.Monitor.geometry,
     nodes.Monitor_Screen.geometry,
     nodes.Monitor_Stand.geometry,
     outlineOpacity,
+    handleMonitorClick,
     tutorialStep
   ]);
 
@@ -345,7 +393,12 @@ const Room: React.FC<GroupProps> = (props) => {
     console.log('rendering stereo');
 
     return (
-      <group onClick={() => console.log('Stereo clicked!')}>
+      <group
+        onClick={handleStereoClick}
+        onPointerOut={() => setStereoHovered(false)}
+        onPointerOver={() => setStereoHovered(true)}
+        ref={stereoGroupRef}
+      >
         <mesh
           castShadow={true}
           geometry={nodes.Stereo_Table.geometry}
@@ -514,6 +567,7 @@ const Room: React.FC<GroupProps> = (props) => {
     nodes.Stereo_Table.geometry,
     nodes.Stereo_Table_Legs.geometry,
     outlineOpacity,
+    handleStereoClick,
     tutorialStep
   ]);
 
@@ -602,6 +656,7 @@ const Room: React.FC<GroupProps> = (props) => {
           position={[0, 0, -0.876]}
           receiveShadow={true}
           scale={1.055}
+          visible={!monitorViewToggled}
         >
           <mesh castShadow={true} geometry={nodes.Arm_Rest.geometry} material={materials.Steel} receiveShadow={true} />
           <mesh
@@ -760,6 +815,7 @@ const Room: React.FC<GroupProps> = (props) => {
     );
   }, [
     materials,
+    monitorViewToggled,
     nodes.Arm_Rest.geometry,
     nodes.Arm_Rest_Cushiion.geometry,
     nodes.Art.geometry,
@@ -906,8 +962,18 @@ const Room: React.FC<GroupProps> = (props) => {
   });
 
   useLayoutEffect(() => {
-    cameraToModel();
-  }, [cameraToModel]);
+    const initCamera = () => {
+      if (!monitorViewToggled) cameraToModel();
+      else if (monitorViewToggled) cameraToMonitor();
+    };
+
+    initCamera();
+
+    window.addEventListener('resize', initCamera);
+    return () => {
+      window.removeEventListener('resize', initCamera);
+    };
+  }, [cameraToModel, cameraToMonitor, monitorViewToggled]);
 
   return (
     <group dispose={null} ref={modelGroupRef} {...props}>
@@ -919,7 +985,7 @@ const Room: React.FC<GroupProps> = (props) => {
       {monitor}
       {/* Porsche */}
       {porsche}
-      {/* Stereo Setup */}
+      {/* Stereo */}
       {stereo}
     </group>
   );

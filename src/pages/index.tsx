@@ -28,7 +28,7 @@ const IndexPage: React.FC<PageProps> = () => {
           frameloop="demand"
           orthographic={true}
           shadows={true}
-          style={{ position: 'absolute', paddingLeft: '1.2%', zIndex: 100 }}
+          style={{ position: 'absolute', zIndex: 100 }}
         >
           <Suspense fallback={null}>
             <Stage

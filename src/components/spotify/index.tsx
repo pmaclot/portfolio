@@ -26,7 +26,7 @@ const Spotify: React.FC = () => {
               style={{
                 position: 'absolute',
                 alignItems: 'center',
-                background: '#95006D',
+                background: 'var(--theme-ui-colors-accent)',
                 borderRadius: '12px',
                 display: 'flex',
                 justifyContent: 'center',

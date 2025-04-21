@@ -15,7 +15,7 @@ const Sun: React.FC = () => {
     }
   });
 
-  return <directionalLight castShadow={true} color={0xffffff} intensity={5} ref={lightRef} rotation={[-2, -1, 0]} />;
+  return <directionalLight castShadow={true} color={0xffffef} intensity={5} ref={lightRef} rotation={[-2, -1, 0]} />;
 };
 
 export default Sun;

@@ -16,20 +16,20 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const { spotifyPlayerShowed } = useContext(UIContext);
+  const { spotifyPlayerToggled } = useContext(UIContext);
 
   const [height, setHeight] = useState<string>('100%');
   const [width, setWidth] = useState<string>('100%');
 
-  const canvasRef = useRef<HTMLDivElement>(null!);
+  const pageRef = useRef<HTMLDivElement>(null!);
 
   useEffect(() => {
     const measureCanvasSize = () => {
-      const canvasElement = canvasRef.current;
+      const pageElement = pageRef.current;
 
-      if (canvasElement) {
-        const canvasHeight = canvasElement.clientHeight;
-        const canvasWidth = canvasElement.clientWidth;
+      if (pageElement) {
+        const canvasHeight = pageElement.clientHeight;
+        const canvasWidth = pageElement.clientWidth;
 
         setWidth(`${canvasWidth % 2 !== 0 ? canvasWidth - 1 : canvasWidth}px`);
         setHeight(`${canvasHeight % 2 !== 0 ? canvasHeight - 1 : canvasHeight}px`);
@@ -46,22 +46,21 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <Box
+      ref={pageRef}
       sx={{
         height: '100svh',
         width: '100svw'
       }}
     >
       <Header sx={{ position: 'fixed', top: 0, width: '100%', zIndex: 100 }} />
-      <Box ref={canvasRef} sx={{ position: 'relative', height: height, width: width, zIndex: 0 }}>
-        {children}
-      </Box>
-      {spotifyPlayerShowed && (
+      <Box sx={{ position: 'relative', height: height, width: width, zIndex: 0 }}>{children}</Box>
+      {spotifyPlayerToggled && (
         <Box
           sx={{
             position: 'fixed',
-            bottom: 'calc(72px + 10%)',
+            bottom: 'calc(72px + 2.5%)',
             left: '50%',
-            width: '70%',
+            width: ['95%', '80%', '65%', '50%'],
             transform: 'translateX(-50%)',
             zIndex: 200
           }}

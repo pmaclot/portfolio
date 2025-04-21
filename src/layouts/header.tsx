@@ -12,7 +12,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ sx }) => {
-  const { toggleDesktopView } = useContext(UIContext);
+  const { toggleMonitorView } = useContext(UIContext);
 
   const [date, setDate] = useState<string>('');
 
@@ -35,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({ sx }) => {
     >
       <Link
         as="h1"
-        onClick={toggleDesktopView}
+        onClick={toggleMonitorView}
         sx={{
           fontFamily: 'Honk, system-ui',
           fontOpticalSizing: 'auto',

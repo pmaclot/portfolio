@@ -2,20 +2,20 @@ import React from 'react';
 
 interface UIContextState {
   sceneLoaded: boolean;
-  desktopViewToggled: boolean;
-  spotifyPlayerShowed: boolean;
+  monitorViewToggled: boolean;
+  spotifyPlayerToggled: boolean;
   loadScene: () => void;
-  toggleDesktopView: () => void;
-  showSpotifyPlayer: () => void;
+  toggleMonitorView: () => void;
+  toggleSpotifyPlayer: () => void;
 }
 
 const defaultState: UIContextState = {
   sceneLoaded: false,
-  desktopViewToggled: false,
-  spotifyPlayerShowed: false,
+  monitorViewToggled: false,
+  spotifyPlayerToggled: false,
   loadScene: () => {},
-  toggleDesktopView: () => {},
-  showSpotifyPlayer: () => {}
+  toggleMonitorView: () => {},
+  toggleSpotifyPlayer: () => {}
 };
 
 const UIContext = React.createContext(defaultState);
@@ -23,31 +23,31 @@ const UIContext = React.createContext(defaultState);
 class UIProvider extends React.Component<{ children: React.ReactNode }> {
   state = {
     sceneLoaded: false,
-    desktopViewToggled: false,
-    spotifyPlayerShowed: false
+    monitorViewToggled: false,
+    spotifyPlayerToggled: false
   };
 
   loadScene = () => {
     this.setState({
-      sceneLoaded: !this.state.sceneLoaded,
-      desktopViewToggled: false,
-      spotifyPlayerShowed: false
+      sceneLoaded: true,
+      monitorViewToggled: false,
+      spotifyPlayerToggled: false
     });
   };
 
-  toggleDesktopView = () => {
+  toggleMonitorView = () => {
     this.setState({
-      sceneLoaded: false,
-      desktopViewToggled: !this.state.desktopViewToggled,
-      spotifyPlayerShowed: false
+      sceneLoaded: this.state.sceneLoaded,
+      monitorViewToggled: !this.state.monitorViewToggled,
+      spotifyPlayerToggled: false
     });
   };
 
-  showSpotifyPlayer = () => {
+  toggleSpotifyPlayer = () => {
     this.setState({
-      sceneLoaded: false,
-      desktopViewToggled: false,
-      spotifyPlayerShowed: !this.state.spotifyPlayerShowed
+      sceneLoaded: this.state.sceneLoaded,
+      monitorViewToggled: false,
+      spotifyPlayerToggled: !this.state.spotifyPlayerToggled
     });
   };
 
@@ -56,11 +56,11 @@ class UIProvider extends React.Component<{ children: React.ReactNode }> {
       <UIContext.Provider
         value={{
           sceneLoaded: this.state.sceneLoaded,
-          desktopViewToggled: this.state.desktopViewToggled,
-          spotifyPlayerShowed: this.state.spotifyPlayerShowed,
+          monitorViewToggled: this.state.monitorViewToggled,
+          spotifyPlayerToggled: this.state.spotifyPlayerToggled,
           loadScene: this.loadScene,
-          toggleDesktopView: this.toggleDesktopView,
-          showSpotifyPlayer: this.showSpotifyPlayer
+          toggleMonitorView: this.toggleMonitorView,
+          toggleSpotifyPlayer: this.toggleSpotifyPlayer
         }}
       >
         {this.props.children}
