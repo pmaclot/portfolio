@@ -1,18 +1,18 @@
-import React, { Suspense, useRef } from 'react';
+import React, { Suspense } from 'react';
 
 // Components
 import Room from '../components/room';
+import Loader from '../components/room/loader';
+import Sun from '../components/room/sun';
 
 // Contexts
 import UIContext from '../context/ui';
 
 // Externals
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { CameraControls, Preload, Stage, useProgress } from '@react-three/drei';
+import { CameraControls, Preload, Stage } from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
 import CameraControlsImpl from 'camera-controls';
 import type { HeadFC, PageProps } from 'gatsby';
-import { Box, Flex, Progress } from 'theme-ui';
-import { DirectionalLight } from 'three';
 
 // Layouts
 import Layout from '../layouts';
@@ -28,7 +28,7 @@ const IndexPage: React.FC<PageProps> = () => {
           frameloop="demand"
           orthographic={true}
           shadows={true}
-          style={{ position: 'absolute', zIndex: 100 }}
+          style={{ position: 'absolute', paddingLeft: '1.2%', zIndex: 100 }}
         >
           <Suspense fallback={null}>
             <Stage
@@ -70,7 +70,7 @@ const IndexPage: React.FC<PageProps> = () => {
               }}
             />
 
-            <CameraDirectionalLight />
+            <Sun />
           </Suspense>
         </Canvas>
       )}
@@ -78,46 +78,6 @@ const IndexPage: React.FC<PageProps> = () => {
     </Layout>
   );
 };
-
-// TODO: Move to a separate file
-function CameraDirectionalLight() {
-  const { camera } = useThree();
-
-  const lightRef = useRef<DirectionalLight>(null);
-
-  useFrame(() => {
-    if (lightRef.current) {
-      lightRef.current.position.set(-camera.rotation.z * (40 / Math.PI), 5, -10);
-    }
-  });
-
-  return <directionalLight castShadow={true} color={0xffffff} intensity={5} ref={lightRef} rotation={[-2, -1, 0]} />;
-}
-
-// TODO: Move to a separate file
-function Loader() {
-  const { active, progress } = useProgress();
-
-  if (!active && progress === 100) return null;
-
-  return (
-    <Flex
-      sx={{
-        alignItems: 'center',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        position: 'absolute',
-        height: '100%',
-        width: '100%',
-        zIndex: 0
-      }}
-    >
-      <Box as="div" sx={{ width: '200px' }}>
-        <Progress max={100} value={progress.toFixed(0)} />
-      </Box>
-    </Flex>
-  );
-}
 
 export default IndexPage;
 

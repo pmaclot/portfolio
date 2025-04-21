@@ -10,6 +10,7 @@ import { useThemeUI } from 'theme-ui';
 
 // Screens
 import SplashScreen from './screens/splashscreen';
+import { Toaster } from 'react-hot-toast';
 
 // Suppress useLayoutEffect warnings when running outside a browser
 if (typeof window === 'undefined') React.useLayoutEffect = React.useEffect;
@@ -32,10 +33,8 @@ const App: React.FC<AppProps> = ({ children }) => {
     leave: { delay: 500, opacity: '0' },
     onDestroyed: (isDestroyed: boolean) => {
       if (isDestroyed) {
-        // Show body scrollbar
         document.body.style.overflow = 'auto';
 
-        // Start loading the scene
         loadScene();
       }
     }
@@ -47,13 +46,11 @@ const App: React.FC<AppProps> = ({ children }) => {
 
   useLayoutEffect(() => {
     if (splashscreen) {
-      // Hide body scrollbar
       document.body.style.overflow = 'hidden';
     } else {
-      // Show body scrollbar
       document.body.style.overflow = 'auto';
 
-      // Start loading the scene
+      // TODO: Remove
       loadScene();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,6 +80,16 @@ const App: React.FC<AppProps> = ({ children }) => {
           )
       )}
       {children}
+      <Toaster
+        gutter={24}
+        reverseOrder={true}
+        toastOptions={{
+          style: {
+            margin: 0,
+            padding: 0
+          }
+        }}
+      />
     </React.Fragment>
   );
 };

@@ -1,3 +1,5 @@
+The model "room.glb" has been exported using Blender with the following settings:
+
 Include:
 - Visible Objects
 - Punctual Lights

@@ -48,6 +48,34 @@ const theme = {
       borderRadius: '9999px'
     }
   },
+  buttons: {
+    primary: {
+      color: 'background',
+      bg: 'primary',
+      cursor: 'pointer'
+    },
+    secondary: {
+      color: 'background',
+      bg: 'secondary',
+      cursor: 'pointer'
+    },
+    black: {
+      color: 'background',
+      bg: 'black',
+      '&:disabled': {
+        bg: 'darkgray'
+      },
+      cursor: 'pointer'
+    },
+    white: {
+      color: 'text',
+      bg: 'white',
+      '&:disabled': {
+        bg: 'lightgray'
+      },
+      cursor: 'pointer'
+    }
+  },
   config: {
     initialColorModeName: 'light',
     printColorModeName: 'light',
