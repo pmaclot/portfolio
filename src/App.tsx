@@ -7,10 +7,10 @@ import UIContext from './context/ui';
 import { useLocation } from '@reach/router';
 import { animated, useTransition } from '@react-spring/web';
 import { useThemeUI } from 'theme-ui';
+import { Toaster } from 'react-hot-toast';
 
 // Screens
 import SplashScreen from './screens/splashscreen';
-import { Toaster } from 'react-hot-toast';
 
 // Suppress useLayoutEffect warnings when running outside a browser
 if (typeof window === 'undefined') React.useLayoutEffect = React.useEffect;

@@ -3,8 +3,11 @@ import React, { memo, useCallback, useContext, useEffect, useLayoutEffect, useMe
 // Context
 import UIContext from '../../context/ui';
 
+// Desktop
+import Windows from '../windows';
+
 // Externals
-import { CameraControls, Outlines, useCursor, useGLTF } from '@react-three/drei';
+import { CameraControls, Html, Outlines, useCursor, useGLTF } from '@react-three/drei';
 import { GroupProps, useFrame, useThree } from '@react-three/fiber';
 import { Alert, Button, Flex, Paragraph } from 'theme-ui';
 import { Group, Mesh, MeshStandardMaterial } from 'three';
@@ -171,8 +174,8 @@ const Room: React.FC<GroupProps> = (props) => {
       (controls as unknown as CameraControls).rotateTo(0.00001, Math.PI / 2.21, true),
       (controls as unknown as CameraControls).fitToBox(monitorGroupRef.current, true, {
         cover: false,
-        paddingLeft: 0.1,
-        paddingRight: 0.1,
+        paddingLeft: 0.05,
+        paddingRight: 0.05,
         paddingTop: 0.1
       })
     ]);
@@ -291,7 +294,40 @@ const Room: React.FC<GroupProps> = (props) => {
           receiveShadow={true}
           scale={1.129}
         >
-          <mesh castShadow={true} geometry={nodes.Display.geometry} material={materials.Coffee} receiveShadow={true} />
+          <mesh castShadow={true} geometry={nodes.Display.geometry} material={materials.Black} receiveShadow={true}>
+            <Html
+              distanceFactor={0.4} // If set (default: undefined), children will be scaled by this factor, and also by distance to a PerspectiveCamera / zoom by a OrthographicCamera.
+              geometry={<planeGeometry args={[1.415, 0.65]} />}
+              occlude="blending"
+              position={[0, 0.715, 0.04]}
+              style={{
+                height: 650,
+                width: 1417
+              }}
+              transform={true}
+              zIndexRange={[100, 10]} // Z-order range (default=[16777271, 0])
+            >
+              <div
+                className="win-wrapper"
+                onClick={!monitorViewToggled ? handleMonitorClick : undefined}
+                style={{
+                  height: '100%',
+                  width: '100%',
+                  cursor: !monitorViewToggled ? 'pointer' : undefined
+                }}
+              >
+                <div
+                  style={{
+                    height: '100%',
+                    width: '100%',
+                    pointerEvents: !monitorViewToggled ? 'none' : undefined
+                  }}
+                >
+                  <Windows shutdown={toggleMonitorView} />
+                </div>
+              </div>
+            </Html>
+          </mesh>
           <mesh
             castShadow={true}
             geometry={nodes.Monitor_Screen.geometry}
@@ -311,15 +347,17 @@ const Room: React.FC<GroupProps> = (props) => {
       </group>
     );
   }, [
-    materials,
     monitorViewToggled,
-    nodes.Display.geometry,
+    handleMonitorClick,
     nodes.Monitor.geometry,
+    nodes.Display.geometry,
     nodes.Monitor_Screen.geometry,
     nodes.Monitor_Stand.geometry,
-    outlineOpacity,
-    handleMonitorClick,
-    tutorialStep
+    materials.Steel,
+    materials.Black,
+    toggleMonitorView,
+    tutorialStep,
+    outlineOpacity
   ]);
 
   const porsche = useMemo<React.ReactNode>(() => {
@@ -864,7 +902,7 @@ const Room: React.FC<GroupProps> = (props) => {
             (t) => (
               <Alert key={t.id} sx={{ margin: '-8px -10px' }} variant="accent">
                 <Flex sx={{ flexDirection: 'column' }}>
-                  <Paragraph sx={{ mb: 1 }}>Hi there! 👋</Paragraph>
+                  <Paragraph sx={{ mb: 1 }}>Hey there! 👋</Paragraph>
                   <Paragraph>
                     Welcome to my website. To get started, here are some tips to help you find your way around.
                   </Paragraph>

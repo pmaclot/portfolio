@@ -41,12 +41,11 @@ const Spotify: React.FC = () => {
       )}
       <iframe
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-        frameBorder={0}
         height={152}
         loading="lazy"
         onLoad={onLoad}
         src="https://open.spotify.com/embed/playlist/37i9dQZF1EpptnkkxrqhrO?utm_source=generator"
-        style={{ borderRadius: '12px' }}
+        style={{ border: 0, borderRadius: '12px' }}
         title="Spotify Playlist"
         width="100%"
       />

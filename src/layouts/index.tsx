@@ -23,6 +23,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const pageRef = useRef<HTMLDivElement>(null!);
 
+  // This is for issues iOS rendering the html incorrectly
+  // https://discourse.threejs.org/t/html-content-positioned-wrong-in-ios/77066
   useEffect(() => {
     const measureCanvasSize = () => {
       const pageElement = pageRef.current;
