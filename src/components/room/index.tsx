@@ -123,7 +123,7 @@ type GLTFResult = GLTF & {
 };
 
 const Room: React.FC<GroupProps> = (props) => {
-  const { nodes, materials } = useGLTF('/models/room.glb') as GLTFResult;
+  const { nodes, materials } = useGLTF('https://pierremaclot.dev/room.glb') as GLTFResult;
   const { controls } = useThree();
 
   const { monitorViewToggled, toggleMonitorView, toggleSpotifyPlayer } = useContext(UIContext);
