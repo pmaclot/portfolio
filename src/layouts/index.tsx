@@ -11,6 +11,9 @@ import UIContext from '../context/ui';
 // Externals
 import { Box } from 'theme-ui';
 
+// Hooks
+import useMediaQuery from '../hooks/useMediaQuery';
+
 interface LayoutProps {
   children?: React.ReactNode;
 }
@@ -18,13 +21,14 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { spotifyPlayerToggled } = useContext(UIContext);
 
+  const isDpr1 = useMediaQuery('(-webkit-device-pixel-ratio: 1)');
+  const isDpr3 = useMediaQuery('(-webkit-device-pixel-ratio: 3)');
+
   const [height, setHeight] = useState<string>('100%');
   const [width, setWidth] = useState<string>('100%');
 
   const pageRef = useRef<HTMLDivElement>(null!);
 
-  // This is for issues iOS rendering the html incorrectly
-  // https://discourse.threejs.org/t/html-content-positioned-wrong-in-ios/77066
   useEffect(() => {
     const measureCanvasSize = () => {
       const pageElement = pageRef.current;
@@ -33,8 +37,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         const canvasHeight = pageElement.clientHeight;
         const canvasWidth = pageElement.clientWidth;
 
-        setWidth(`${canvasWidth % 2 !== 0 ? canvasWidth - 1 : canvasWidth}px`);
-        setHeight(`${canvasHeight % 2 !== 0 ? canvasHeight - 1 : canvasHeight}px`);
+        // This is for issues iOS rendering the html incorrectly
+        //https://discourse.threejs.org/t/html-content-positioned-wrong-in-ios/77066
+        var width = Math.round(isDpr1 || isDpr3 ? canvasWidth + 1 : canvasWidth);
+
+        setHeight(`${canvasHeight}px`);
+        setWidth(`${width}px`);
       }
     };
 
@@ -44,7 +52,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     return () => {
       window.removeEventListener('resize', measureCanvasSize);
     };
-  }, []);
+  }, [isDpr1, isDpr3]);
 
   return (
     <Box

@@ -1029,6 +1029,4 @@ const Room: React.FC<GroupProps> = (props) => {
   );
 };
 
-useGLTF.preload('https://data.pierremaclot.dev/room.glb');
-
 export default memo(Room);
