@@ -3,7 +3,6 @@ import React from 'react';
 // Externals
 import { Frame, Modal } from '@react95/core';
 import { Notepad } from '@react95/icons';
-import { overflow, overflowX } from '@xstyled/styled-components';
 
 interface NotepadResumeProps {
   closeModal: () => void;

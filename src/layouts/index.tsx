@@ -23,6 +23,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const isDpr1 = useMediaQuery('(-webkit-device-pixel-ratio: 1)');
   const isDpr3 = useMediaQuery('(-webkit-device-pixel-ratio: 3)');
+  const isLandscape = useMediaQuery('(orientation: landscape)');
 
   const [height, setHeight] = useState<string>('100%');
   const [width, setWidth] = useState<string>('100%');
@@ -39,9 +40,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
         // This is for issues iOS rendering the html incorrectly
         //https://discourse.threejs.org/t/html-content-positioned-wrong-in-ios/77066
-        var width = Math.round(isDpr1 || isDpr3 ? canvasWidth + 1 : canvasWidth);
+        var height = (isDpr1 || isDpr3) && !isLandscape ? canvasHeight - 1 : canvasHeight + 0.04;
+        var width = isDpr1 || isDpr3 ? (isLandscape ? canvasWidth + 1.02 : canvasWidth + 1) : canvasWidth;
 
-        setHeight(`${canvasHeight}px`);
+        setHeight(`${height}px`);
         setWidth(`${width}px`);
       }
     };
@@ -52,7 +54,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     return () => {
       window.removeEventListener('resize', measureCanvasSize);
     };
-  }, [isDpr1, isDpr3]);
+  }, [isDpr1, isDpr3, isLandscape]);
 
   return (
     <Box
